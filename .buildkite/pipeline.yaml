@@ -12,17 +12,21 @@ steps:
 
   - wait
 
-  - label: ":pulumi: :k8s:"
+  # Integration test suites - run these on all pipelines except purely image updates
+
+  - label: ":pulumi::k8s: Integration test"
     concurrency: 3
     concurrency_group: deploy-sourcegraph/integration
     command: .buildkite/integration-test.sh
+    if: build.branch != 'renovate/docker-sourcegraph-docker-insiders-images'
     env:
       VERBOSE: "true"
       # Can be set to true to help debug test results, but ensure that created resources
       # are removed manually
       NOCLEANUP: "false"
 
-  - label: ":k8s:"
+  - label: ":lock::k8s: Restricted overlay integration test"
+    if: build.branch != 'renovate/docker-sourcegraph-docker-insiders-images'
     concurrency: 3
     concurrency_group: deploy-sourcegraph/integration-restricted
     command: .buildkite/integration-restricted-test.sh
@@ -31,10 +35,12 @@ steps:
       # are removed manually
       NOCLEANUP: "false"
 
+  # Cleanup steps
+
   - wait: ~
     continue_on_failure: true
   
-  - label: ":gcompute: :floppy_disk: 🧹"
+  - label: ":gcompute::floppy_disk::broom: Disk cleanup"
     concurrency: 1
     concurrency_group: deploy-sourcegraph/clean-unused-disks
     command: .buildkite/cleanup-unused-disks.sh
