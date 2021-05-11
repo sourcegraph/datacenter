@@ -30,7 +30,7 @@ spec:
       - name: searcher
         env:
         - name: SEARCHER_CACHE_SIZE_MB
-          value: "100000"
+          value: "50000"
         - name: POD_NAME
           valueFrom:
             fieldRef:
@@ -55,11 +55,11 @@ spec:
         resources:
           limits:
             cpu: "2"
-            ephemeral-storage: "8Gi"
+            ephemeral-storage: "51G"
             memory: 2G
           requests:
             cpu: 500m
-            ephemeral-storage: "4Gi"
+            ephemeral-storage: "50G"
             memory: 500M
         volumeMounts:
         - mountPath: /mnt/cache
