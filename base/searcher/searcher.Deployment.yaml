@@ -30,7 +30,9 @@ spec:
       - name: searcher
         env:
         - name: SEARCHER_CACHE_SIZE_MB
-          value: "50000"
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.resources.requests.ephemeral-storage
         - name: POD_NAME
           valueFrom:
             fieldRef:
