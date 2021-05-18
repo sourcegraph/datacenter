@@ -7,4 +7,5 @@ bases:
   - ../bases/pvcs
 patchesStrategicMerge:
   - prometheus/prometheus.ClusterRoleBinding.yaml
+  - prometheus/prometheus.ConfigMap.yaml
   - cadvisor/cadvisor.ClusterRoleBinding.yaml

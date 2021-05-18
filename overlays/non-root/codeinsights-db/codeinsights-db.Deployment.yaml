@@ -8,10 +8,10 @@ spec:
       containers:
         - name: timescaledb
           securityContext:
-            # Required to prevent escalations to root.
+            # Required to prevent escalations to root, postgres runs as this user
             allowPrivilegeEscalation: false
             runAsUser: 70
             runAsGroup: 70
       securityContext:
-        # Required to prevent escalations to root.
-        runAsUser: 70
+        # Required to prevent escalations to root, postgres runs as this user
+        runAsUser: 70 

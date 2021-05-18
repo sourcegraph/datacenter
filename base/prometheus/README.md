@@ -11,7 +11,11 @@
 
 <img src="../../docs/images/prometheus.png" />
 
-A Prometheus instance is part of the default Sourcegraph cluster installation. 
+A Prometheus instance is part of the default Sourcegraph cluster installation.
+
+## Developer notes
+
+Ensure changes here are also made in our namespaced overlay [../../overlays/namespaced/](../../overlays/namespaced/)
 
 ## Optional Steps
 
@@ -98,7 +102,7 @@ ingress rules. On most infrastructure providers, the steps are roughly the follo
 Some customers may want to make the Prometheus API endpoint accessible to other services like the
 following:
 
-- An analytics visualization tool like Grafana 
+- An analytics visualization tool like Grafana
 (note: an instance of Grafana is part of the default Sourcegraph cluster installation)
 - An metrics ingestion pipeline
 

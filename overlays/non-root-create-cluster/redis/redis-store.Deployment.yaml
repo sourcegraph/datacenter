@@ -6,4 +6,4 @@ spec:
   template:
     spec:
       securityContext:
-        fsGroup: 999
+        fsGroup: 1000
