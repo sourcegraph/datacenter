@@ -467,6 +467,14 @@ github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-2021051821311
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210518213113-d17ea66d3b96/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210518221413-e811f707ebec h1:gbXJy5/ci8xMxzd5E8NnHPTygEQbp0VwJVvDVIgsfug=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210518221413-e811f707ebec/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519040203-f494fcb22510 h1:Aq2Vj7sMavGiNgVb2HU8K8NnT5qHoHI4x1J8rE1F0cI=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519040203-f494fcb22510/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519085442-1ff4074962e5 h1:tyBmfrSlO4s86r9v9XBtgWE3ZMUFnU7HavMfhocQG9Y=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519085442-1ff4074962e5/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519102852-7318c9bac9c7 h1:nAeumI3b/ASg7Kv8PUmB2xg4ObR6ky0M3dhpXjRZ3gY=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519102852-7318c9bac9c7/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519105731-74232f599515 h1:Z72LIg8gIHx4ZxDlp9M5zWuB9pI0rsL/P+5pd8Y2Iyw=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519105731-74232f599515/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/spf13/cast v1.2.0/go.mod h1:r2rcYCSwa1IExKTDiTfzaxqT2FNHs8hODu4LnUfgKEg=
 github.com/spf13/cobra v0.0.3 h1:ZlrZ4XsMRm04Fr5pSFxBgfND2EBVa1nLpiy1stUsX/8=
 github.com/spf13/cobra v0.0.3/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=
