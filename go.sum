@@ -479,6 +479,16 @@ github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-2021051914130
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519141304-6f5ccace9e90/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519150740-ec57ea10b54a h1:3mdgUnWMGPLHOu5tbRUYv23ajCa4yfE2Cak32FC+lww=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519150740-ec57ea10b54a/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519165230-3c90c1e054eb h1:KoIkfcGlybuyPMVr/tO8QSir5eufhvSfQGUlS0TY7Kk=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519165230-3c90c1e054eb/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519191728-050e8a349c96 h1:NJQVWuAlKNtaS1Ync8e9uRHXSU0poSSTCr9JF9f6Efk=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519191728-050e8a349c96/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519195956-e3375ec63133 h1:Lh6F+ukQVn0eYakoHfb/iChWbhzKzTzJwIaLU1TrP6Q=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519195956-e3375ec63133/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519202612-4bec97187926 h1:C5EcPOYOf+zH3dkmLJOo31qZbTjtdcjofaLAQ6nw0ac=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519202612-4bec97187926/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519211417-5bc904c736dc h1:hX+tvfTmWif3ob9myxtQF0gl5DZ52isHo6kxbtpJmNg=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210519211417-5bc904c736dc/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/spf13/cast v1.2.0/go.mod h1:r2rcYCSwa1IExKTDiTfzaxqT2FNHs8hODu4LnUfgKEg=
 github.com/spf13/cobra v0.0.3 h1:ZlrZ4XsMRm04Fr5pSFxBgfND2EBVa1nLpiy1stUsX/8=
 github.com/spf13/cobra v0.0.3/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=
