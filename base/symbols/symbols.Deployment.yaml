@@ -31,8 +31,9 @@ spec:
         env:
         - name: SYMBOLS_CACHE_SIZE_MB
           valueFrom:
-            fieldRef:
-              fieldPath: spec.resources.requests.ephemeral-storage
+            resourceFieldRef:
+              containerName: symbols
+              resource: requests.ephemeral-storage
         - name: POD_NAME
           valueFrom:
             fieldRef:
