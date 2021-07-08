@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  template:
+    spec:
+      containers:
+      - name: worker
+        securityContext:
+          # Required to prevent escalations to root.
+          allowPrivilegeEscalation: false
+          runAsUser: 100
+          runAsGroup: 101

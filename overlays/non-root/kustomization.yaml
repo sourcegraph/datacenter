@@ -19,6 +19,7 @@ patchesStrategicMerge:
   - query-runner/query-runner.Deployment.yaml
   - redis/redis-cache.Deployment.yaml
   - redis/redis-store.Deployment.yaml
+  - worker/worker.Deployment.yaml
   - repo-updater/repo-updater.Deployment.yaml
   - searcher/searcher.Deployment.yaml
   - symbols/symbols.Deployment.yaml

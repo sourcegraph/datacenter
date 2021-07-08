@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: Manages background processes.
+  labels:
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+    app.kubernetes.io/component: worker
+  name: worker
+spec:
+  minReadySeconds: 10
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: worker
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        deploy: sourcegraph
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: index.docker.io/sourcegraph/worker:insiders@sha256:c724fc8d29c30135d30e41a798b6a7688b5eda0a3b9a7b74753faf7028c02b41
+        terminationMessagePolicy: FallbackToLogsOnError
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: debug
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: debug
+            scheme: HTTP
+          periodSeconds: 5
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 3189
+          name: http
+        - containerPort: 6060
+          name: debug
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4G
+          requests:
+            cpu: 500m
+            memory: 2G
+      securityContext:
+        runAsUser: 0

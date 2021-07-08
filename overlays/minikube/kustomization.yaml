@@ -47,6 +47,12 @@ patchesJson6902:
     path: delete-resources.yaml
   - target:
       kind: Deployment
+      name: worker
+      group: apps
+      version: v1
+    path: delete-resources.yaml
+  - target:
+      kind: Deployment
       name: pgsql
       group: apps
       version: v1
