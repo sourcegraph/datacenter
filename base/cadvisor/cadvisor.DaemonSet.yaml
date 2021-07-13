@@ -26,7 +26,7 @@ spec:
       serviceAccountName: cadvisor
       containers:
       - name: cadvisor
-        image: index.docker.io/sourcegraph/cadvisor:insiders@sha256:6feaf15d27c770e1f185f5572fee82cbf799247463d558eea174cf4960eb13e0
+        image: index.docker.io/sourcegraph/cadvisor:insiders@sha256:fdddedd2c6645185e2f451fd8c79f7cc714526185a8bccd5bb4a1a7a65a3ead3
         args:
         # Kubernetes-specific flags below (other flags are baked into the Docker image)
         #

@@ -2,19 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    description: Handles conversion of uploaded precise code intelligence bundles.
+    description: Manages background processes.
   labels:
     deploy: sourcegraph
     sourcegraph-resource-requires: no-cluster-admin
-    app.kubernetes.io/component: precise-code-intel
-  name: precise-code-intel-worker
+    app.kubernetes.io/component: worker
+  name: worker
 spec:
   minReadySeconds: 10
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: precise-code-intel-worker
+      app: worker
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -24,18 +24,16 @@ spec:
     metadata:
       labels:
         deploy: sourcegraph
-        app: precise-code-intel-worker
+        app: worker
     spec:
       containers:
-      - name: precise-code-intel-worker
+      - name: worker
         env:
-        - name: NUM_WORKERS
-          value: '4'
         - name: POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        image: index.docker.io/sourcegraph/precise-code-intel-worker:insiders@sha256:d40390a88351ce8c19d4c5cf29b3b9ce24c29e4b279f0f776bc620b06c94a996
+        image: index.docker.io/sourcegraph/worker:insiders@sha256:c724fc8d29c30135d30e41a798b6a7688b5eda0a3b9a7b74753faf7028c02b41
         terminationMessagePolicy: FallbackToLogsOnError
         livenessProbe:
           httpGet:
@@ -52,7 +50,7 @@ spec:
           periodSeconds: 5
           timeoutSeconds: 5
         ports:
-        - containerPort: 3188
+        - containerPort: 3189
           name: http
         - containerPort: 6060
           name: debug

@@ -41,6 +41,8 @@ resources:
 - base/github-proxy/github-proxy.Deployment.yaml
 - base/repo-updater/repo-updater.Service.yaml
 - base/repo-updater/repo-updater.Deployment.yaml
+- base/worker/worker.Deployment.yaml
+- base/worker/worker.Service.yaml
 - base/gitserver/gitserver.Service.yaml
 - base/gitserver/gitserver.StatefulSet.yaml
 - base/precise-code-intel/worker.Deployment.yaml

@@ -33,9 +33,16 @@ spec:
           name: disk
         securityContext:
           runAsUser: 0
+        resources:
+          limits:
+            cpu: "10m"
+            memory: "50Mi"
+          requests:
+            cpu: "10m"
+            memory: "50Mi"
       containers:
       - env:
-        image: index.docker.io/sourcegraph/postgres-12.6:95244_2021-05-06_2c1f77e@sha256:35040317490324a15e1259c9023a726eb27c694530f6f8877e87d337c7b97778
+        image: index.docker.io/sourcegraph/postgres-12.6-alpine:insiders@sha256:24ef3bb2ed8729570656c4b457654141390966baf4dae743b50431985fa46ff3
         terminationMessagePolicy: FallbackToLogsOnError
         readinessProbe:
           exec:
@@ -67,7 +74,7 @@ spec:
           value: postgres://sg:@localhost:5432/?sslmode=disable
         - name: PG_EXPORTER_EXTEND_QUERY_PATH
           value: /config/queries.yaml
-        image: index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:37c01d94934a15baecbf40042da0799f7761f28d6084c0ceb7e038224fc4d613
+        image: index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:879be7508b32f6305f8e269d1c7f995ea0c54d6746d41f8046504acc0cea92db
         terminationMessagePolicy: FallbackToLogsOnError
         name: pgsql-exporter
         resources:

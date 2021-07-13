@@ -30,7 +30,7 @@ spec:
     spec:
         containers:
         - name: jaeger
-          image: index.docker.io/sourcegraph/jaeger-all-in-one:insiders@sha256:7d5d6028e0a10d61b5d5e3ed6a035b189d477ce7e57a5de37f6062dc7835409d
+          image: index.docker.io/sourcegraph/jaeger-all-in-one:insiders@sha256:1928db6c3d84a8723791853230d7570cb158ad02faeed9bb84e27216f54541d5
           args: ["--memory.max-traces=20000"]
           ports:
             - containerPort: 5775
