@@ -1,0 +1,27 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    deploy: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.17.2@sha256:eb3320e2f9ca409b7c0aa71aea3cf7ce7d018f03a372564dbdb023646958770b
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    description: Metrics/monitoring dashboards and alerts.
+  labels:
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+    app.kubernetes.io/component: grafana
+  name: grafana
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: grafana
+  serviceName: grafana
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: grafana
+        deploy: sourcegraph
+    spec:
+      containers:
+        - name: grafana
+          image: index.docker.io/sourcegraph/grafana:insiders@sha256:2a6a8e90937498068a4006f6b0d0f53dc8e635894975143dcfed24d4a6b3c0d5
+          terminationMessagePolicy: FallbackToLogsOnError
+          ports:
+            - containerPort: 3370
+              name: http
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: grafana-data
+            - mountPath: /sg_config_grafana/provisioning/datasources
+              name: config
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 512Mi
+      serviceAccountName: grafana
+      securityContext:
+        runAsUser: 0
+      volumes:
+        - name: config
+          configMap:
+            defaultMode: 511
+            name: grafana
+  volumeClaimTemplates:
+    - metadata:
+        name: grafana-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+        storageClassName: sourcegraph

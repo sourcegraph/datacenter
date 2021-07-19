@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    description: Backend for indexed text search operations.
+  labels:
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+    app.kubernetes.io/component: indexed-search
+  name: indexed-search
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: indexed-search
+  serviceName: indexed-search
+  template:
+    metadata:
+      labels:
+        app: indexed-search
+        deploy: sourcegraph
+    spec:
+      containers:
+        - name: zoekt-webserver
+          image: index.docker.io/sourcegraph/indexed-searcher:insiders@sha256:d623877defd1551363b840aa132789239e0c3e89d080ee7c777eebdd2c3627ec
+          terminationMessagePolicy: FallbackToLogsOnError
+          ports:
+            - containerPort: 6070
+              name: http
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4G
+            requests:
+              cpu: 500m
+              memory: 2G
+          volumeMounts:
+            - mountPath: /data
+              name: data
+        - name: zoekt-indexserver
+          image: index.docker.io/sourcegraph/search-indexer:insiders@sha256:be1812d9450b3f89cf118d6bab3a0ba62cfdb20a7f9823bc891b96fb083cab6d
+          terminationMessagePolicy: FallbackToLogsOnError
+          ports:
+            - containerPort: 6072
+              name: index-http
+          resources:
+            limits:
+              cpu: "8"
+              memory: 8G
+            requests:
+              cpu: "4"
+              memory: 4G
+          volumeMounts:
+            - mountPath: /data
+              name: data
+      securityContext:
+        runAsUser: 0
+      volumes:
+        - name: data
+  updateStrategy:
+    type: RollingUpdate
+  volumeClaimTemplates:
+    - metadata:
+        labels:
+          deploy: sourcegraph
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 200Gi
+        storageClassName: sourcegraph

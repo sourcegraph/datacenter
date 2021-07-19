@@ -1,0 +1,75 @@
+apiVersion: v1
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval:     30s
+      evaluation_interval: 30s
+
+    alerting:
+      alertmanagers:
+        - kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - ns-sourcegraph
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_service_name]
+              regex: alertmanager
+              action: keep
+
+    rule_files:
+      - '*_rules.yml'
+      - "/sg_config_prometheus/*_rules.yml"
+      - "/sg_prometheus_add_ons/*_rules.yml"
+
+    scrape_configs:
+    - job_name: 'kubernetes-service-endpoints'
+
+      kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+           - ns-sourcegraph
+
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_annotation_sourcegraph_prometheus_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+        action: replace
+        target_label: __scheme__
+        regex: (https?)
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+        action: replace
+        target_label: __address__
+        regex: (.+)(?::\d+);(\d+)
+        replacement: $1:$2
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        # Sourcegraph specific customization. We want a more convenient to type label.
+        # target_label: kubernetes_namespace
+        target_label: ns
+      - source_labels: [__meta_kubernetes_service_name]
+        action: replace
+        target_label: kubernetes_name
+      # Sourcegraph specific customization. We want a nicer name for job
+      - source_labels: [app]
+        action: replace
+        target_label: job
+      # Sourcegraph specific customization. We want a nicer name for instance
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: instance
+  node_rules.yml: ""
+kind: ConfigMap
+metadata:
+  labels:
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+  name: prometheus

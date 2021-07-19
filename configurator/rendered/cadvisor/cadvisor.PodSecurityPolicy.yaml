@@ -1,0 +1,26 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  labels:
+    app: cadvisor
+    deploy: sourcegraph
+    sourcegraph-resource-requires: cluster-admin
+    app.kubernetes.io/component: cadvisor
+  name: cadvisor
+spec:
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  runAsUser:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  volumes:
+    - "*"
+  allowedHostPaths:
+    - pathPrefix: /
+    - pathPrefix: /var/run
+    - pathPrefix: /sys
+    - pathPrefix: /var/lib/docker
+    - pathPrefix: /dev/disk

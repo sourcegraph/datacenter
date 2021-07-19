@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    category: rbac
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+  name: prometheus-nonprivileged
+roleRef:
+  apiGroup: ""
+  kind: ClusterRole
+  name: view
+subjects:
+  - kind: ServiceAccount
+    name: prometheus
+    namespace: ns-sourcegraph

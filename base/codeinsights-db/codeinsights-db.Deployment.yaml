@@ -72,5 +72,5 @@ spec:
           claimName: codeinsights-db
       - name: timescaledb-conf
         configMap:
-          defaultMode: 0777
+          defaultMode: 0o777
           name: codeinsights-db-conf

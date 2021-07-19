@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/port: "9000"
+    prometheus.io/path: /minio/prometheus/metrics
+    sourcegraph.prometheus/scrape: "true"
+  labels:
+    app: minio
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+    app.kubernetes.io/component: minio
+  name: minio
+spec:
+  ports:
+    - name: minio
+      port: 9000
+      targetPort: minio
+  selector:
+    app: minio
+  type: ClusterIP

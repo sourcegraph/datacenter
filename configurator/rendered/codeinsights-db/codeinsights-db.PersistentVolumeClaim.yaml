@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/component: codeinsights-db
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+  name: codeinsights-db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Gi
+  storageClassName: sourcegraph

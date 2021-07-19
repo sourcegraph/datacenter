@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: Rate-limiting proxy for the GitHub API.
+  labels:
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+    app.kubernetes.io/component: github-proxy
+  name: github-proxy
+spec:
+  minReadySeconds: 10
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: github-proxy
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: github-proxy
+        deploy: sourcegraph
+    spec:
+      containers:
+        - name: github-proxy
+          image: index.docker.io/sourcegraph/github-proxy:insiders@sha256:265c9b8488f9c439fb9d56c08c088467e84d039a8aec194ee824c9184104bd12
+          terminationMessagePolicy: FallbackToLogsOnError
+          ports:
+            - containerPort: 3180
+              name: http
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1G
+            requests:
+              cpu: 100m
+              memory: 250M
+        - name: jaeger-agent
+          image: index.docker.io/sourcegraph/jaeger-agent:insiders@sha256:22ecc0f4c041fb22b1b8c5a7c6f0f5233c80b147e26604ebe310a05860089dca
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+          ports:
+            - containerPort: 5775
+              protocol: UDP
+            - containerPort: 5778
+              protocol: TCP
+            - containerPort: 6831
+              protocol: UDP
+            - containerPort: 6832
+              protocol: UDP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 500M
+            requests:
+              cpu: 100m
+              memory: 100M
+          args:
+            - --reporter.grpc.host-port=jaeger-collector:14250
+            - --reporter.type=grpc
+      securityContext:
+        runAsUser: 0

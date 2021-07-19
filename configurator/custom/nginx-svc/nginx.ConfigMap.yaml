@@ -1,0 +1,65 @@
+apiVersion: v1 # for versions before 1.9.0 use apps/v1beta2
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  labels:
+    deploy: nginx
+data:
+  nginx.conf: |-
+    user  nginx;
+    worker_processes  1;
+
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+
+    events {
+        worker_connections  1024;
+    }
+
+    http {
+        server_tokens off;
+
+        # SAML redirect response headers are sometimes large
+        proxy_buffer_size     128k;
+        proxy_buffers         8 256k;
+        proxy_busy_buffers_size    256k;
+
+        ssl_certificate     /etc/nginx/tls.crt;
+        ssl_certificate_key /etc/nginx/tls.key;
+        ssl_ciphers         EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;
+        ssl_protocols       TLSv1.1 TLSv1.2;
+
+        access_log off;
+        upstream backend {
+            # Do not remove. The contents of sourcegraph_backend.conf can change
+            # between versions and may include improvements to the configuration.
+            server 127.0.0.1:8080;
+        }
+
+        server {
+            # Do not remove. The contents of sourcegraph_server.conf can change
+            # between versions and may include improvements to the configuration.
+            client_max_body_size 150M;
+
+            listen 4443 ssl;
+            location / {
+                proxy_pass http://sourcegraph-frontend:30080;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+
+                # SAML redirect response headers are sometimes large
+                proxy_buffer_size     128k;
+                proxy_buffers         8 256k;
+                proxy_busy_buffers_size    256k;
+            }
+        }
+    }
+  tls.crt: |-
+    -----BEGIN CERTIFICATE-----
+    REPLACE WITH YOUR CERTIFICATE
+    -----END CERTIFICATE-----
+  tls.key: |-
+    -----BEGIN PRIVATE KEY-----
+    REPLACE WITH YOUR PRIVATE KEY
+    -----END PRIVATE KEY-----

@@ -93,5 +93,5 @@ spec:
           claimName: pgsql
       - name: pgsql-conf
         configMap:
-          defaultMode: 0777
+          defaultMode: 0o777
           name: pgsql-conf

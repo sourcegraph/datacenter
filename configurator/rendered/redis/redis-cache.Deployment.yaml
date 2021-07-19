@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: Redis for storing short-lived caches.
+  labels:
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+    app.kubernetes.io/component: redis
+  name: redis-cache
+spec:
+  minReadySeconds: 10
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: redis-cache
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        deploy: sourcegraph
+        app: redis-cache
+    spec:
+      containers:
+        - name: redis-cache
+          image: index.docker.io/sourcegraph/redis-cache:insiders@sha256:7820219195ab3e8fdae5875cd690fed1b2a01fd1063bd94210c0e9d529c38e56
+          terminationMessagePolicy: FallbackToLogsOnError
+          livenessProbe:
+            initialDelaySeconds: 30
+            tcpSocket:
+              port: redis
+          ports:
+            - containerPort: 6379
+              name: redis
+          readinessProbe:
+            initialDelaySeconds: 5
+            tcpSocket:
+              port: redis
+          resources:
+            limits:
+              cpu: "1"
+              memory: 7Gi
+            requests:
+              cpu: "1"
+              memory: 7Gi
+          volumeMounts:
+            - mountPath: /redis-data
+              name: redis-data
+        - name: redis-exporter
+          image: index.docker.io/sourcegraph/redis_exporter:84464_2021-01-15_c2e4c28@sha256:f3f51453e4261734f08579fe9c812c66ee443626690091401674be4fb724da70
+          terminationMessagePolicy: FallbackToLogsOnError
+          ports:
+            - containerPort: 9121
+              name: redisexp
+          resources:
+            limits:
+              cpu: 10m
+              memory: 100Mi
+            requests:
+              cpu: 10m
+              memory: 100Mi
+      securityContext:
+        runAsUser: 0
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis-cache

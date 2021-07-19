@@ -52,7 +52,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          defaultMode: 0777
+          defaultMode: 0o777
           name: grafana
   volumeClaimTemplates:
   - metadata:

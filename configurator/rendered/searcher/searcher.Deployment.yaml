@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: Backend for text search operations.
+  labels:
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+    app.kubernetes.io/component: searcher
+  name: searcher
+spec:
+  minReadySeconds: 10
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: searcher
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        deploy: sourcegraph
+        app: searcher
+    spec:
+      containers:
+        - name: searcher
+          env:
+            - name: SEARCHER_CACHE_SIZE_MB
+              value: "100000"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CACHE_DIR
+              value: /mnt/cache/$(POD_NAME)
+          image: index.docker.io/sourcegraph/searcher:insiders@sha256:9e7dedef58f0b30cea96501e73aeabc632deec8db126a5bafa58ea890343a180
+          terminationMessagePolicy: FallbackToLogsOnError
+          ports:
+            - containerPort: 3181
+              name: http
+            - containerPort: 6060
+              name: debug
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "2"
+              ephemeral-storage: 8Gi
+              memory: 2G
+            requests:
+              cpu: 500m
+              ephemeral-storage: 4Gi
+              memory: 500M
+          volumeMounts:
+            - mountPath: /mnt/cache
+              name: cache-ssd
+        - name: jaeger-agent
+          image: index.docker.io/sourcegraph/jaeger-agent:insiders@sha256:22ecc0f4c041fb22b1b8c5a7c6f0f5233c80b147e26604ebe310a05860089dca
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+          ports:
+            - containerPort: 5775
+              protocol: UDP
+            - containerPort: 5778
+              protocol: TCP
+            - containerPort: 6831
+              protocol: UDP
+            - containerPort: 6832
+              protocol: UDP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 500M
+            requests:
+              cpu: 100m
+              memory: 100M
+          args:
+            - --reporter.grpc.host-port=jaeger-collector:14250
+            - --reporter.type=grpc
+      securityContext:
+        runAsUser: 0
+      volumes:
+        - emptyDir: {}
+          name: cache-ssd

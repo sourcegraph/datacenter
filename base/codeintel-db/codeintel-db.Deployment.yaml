@@ -92,5 +92,5 @@ spec:
           claimName: codeintel-db
       - name: pgsql-conf
         configMap:
-          defaultMode: 0777
+          defaultMode: 0o777
           name: codeintel-db-conf

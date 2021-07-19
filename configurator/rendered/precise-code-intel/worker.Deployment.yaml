@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: Handles conversion of uploaded precise code intelligence bundles.
+  labels:
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+    app.kubernetes.io/component: precise-code-intel
+  name: precise-code-intel-worker
+spec:
+  minReadySeconds: 10
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: precise-code-intel-worker
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        deploy: sourcegraph
+        app: precise-code-intel-worker
+    spec:
+      containers:
+        - name: precise-code-intel-worker
+          env:
+            - name: NUM_WORKERS
+              value: "4"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          image: index.docker.io/sourcegraph/precise-code-intel-worker:insiders@sha256:c61afcd6b6b530c2a3bdfde44e637fe2a62b70c3a4c57d97d7b5cac460b64d54
+          terminationMessagePolicy: FallbackToLogsOnError
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: debug
+              scheme: HTTP
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: debug
+              scheme: HTTP
+            periodSeconds: 5
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 3188
+              name: http
+            - containerPort: 6060
+              name: debug
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4G
+            requests:
+              cpu: 500m
+              memory: 2G
+      securityContext:
+        runAsUser: 0

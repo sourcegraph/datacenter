@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: Backend for syntax highlighting operations.
+  labels:
+    deploy: sourcegraph
+    sourcegraph-resource-requires: no-cluster-admin
+    app.kubernetes.io/component: syntect-server
+  name: syntect-server
+spec:
+  minReadySeconds: 10
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: syntect-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        deploy: sourcegraph
+        app: syntect-server
+    spec:
+      containers:
+        - name: syntect-server
+          env: null
+          image: index.docker.io/sourcegraph/syntax-highlighter:insiders@sha256:c3f19209794119c703f43a830918005cd6346e15d6db56e42dde63f7acb23b9e
+          terminationMessagePolicy: FallbackToLogsOnError
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 9238
+              name: http
+          readinessProbe:
+            tcpSocket:
+              port: http
+          resources:
+            limits:
+              cpu: "4"
+              memory: 6G
+            requests:
+              cpu: 250m
+              memory: 2G
+      securityContext:
+        runAsUser: 0

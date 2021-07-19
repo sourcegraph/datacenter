@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+    description: DaemonSet to ensure all nodes run a cAdvisor pod.
+    seccomp.security.alpha.kubernetes.io/pod: docker/default
+  labels:
+    deploy: sourcegraph
+    sourcegraph-resource-requires: cluster-admin
+    app.kubernetes.io/component: cadvisor
+  name: cadvisor
+spec:
+  selector:
+    matchLabels:
+      app: cadvisor
+  template:
+    metadata:
+      annotations:
+        description: Collects and exports container metrics.
+        prometheus.io/port: "48080"
+        sourcegraph.prometheus/scrape: "true"
+      labels:
+        deploy: sourcegraph
+        app: cadvisor
+    spec:
+      serviceAccountName: cadvisor
+      containers:
+        - name: cadvisor
+          image: index.docker.io/sourcegraph/cadvisor:insiders@sha256:6feaf15d27c770e1f185f5572fee82cbf799247463d558eea174cf4960eb13e0
+          args:
+            - --store_container_labels=false
+            - --whitelisted_container_labels=io.kubernetes.container.name,io.kubernetes.pod.name,io.kubernetes.pod.namespace,io.kubernetes.pod.uid
+          resources:
+            requests:
+              memory: 200Mi
+              cpu: 150m
+            limits:
+              memory: 2000Mi
+              cpu: 300m
+          volumeMounts:
+            - name: rootfs
+              mountPath: /rootfs
+              readOnly: true
+            - name: var-run
+              mountPath: /var/run
+              readOnly: true
+            - name: sys
+              mountPath: /sys
+              readOnly: true
+            - name: docker
+              mountPath: /var/lib/docker
+              readOnly: true
+            - name: disk
+              mountPath: /dev/disk
+              readOnly: true
+          ports:
+            - name: http
+              containerPort: 48080
+              protocol: TCP
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: rootfs
+          hostPath:
+            path: /
+        - name: var-run
+          hostPath:
+            path: /var/run
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: docker
+          hostPath:
+            path: /var/lib/docker
+        - name: disk
+          hostPath:
+            path: /dev/disk
