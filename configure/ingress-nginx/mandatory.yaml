@@ -217,7 +217,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: nginx-ingress-controller
-          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.29.0@sha256:603a8f4d4c88e83c58d07d20de03a15ed1892bf261d699b3f85ffd892b01bba0
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.33.0@sha256:ad8a1e9e44b4deb6ded8d677e9f0014178294e579d0710a48bca1e05838f2473
           terminationMessagePolicy: FallbackToLogsOnError
           args:
             - /nginx-ingress-controller
