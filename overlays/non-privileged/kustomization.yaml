@@ -2,9 +2,30 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: ns-sourcegraph
 bases:
-  - ../non-root
+  - ../bases/deployments
+  - ../bases/pvcs
 resources:
   - frontend/sourcegraph-frontend.RoleBinding.yaml
   - prometheus/prometheus.RoleBinding.yaml
 patchesStrategicMerge:
+  - codeintel-db/codeintel-db.Deployment.yaml
+  - codeinsights-db/codeinsights-db.Deployment.yaml
+  - frontend/sourcegraph-frontend.Deployment.yaml
+  - github-proxy/github-proxy.Deployment.yaml
+  - gitserver/gitserver.StatefulSet.yaml
+  - grafana/grafana.StatefulSet.yaml
+  - minio/minio.Deployment.yaml
+  - indexed-search/indexed-search.StatefulSet.yaml
+  - jaeger/jaeger.Deployment.yaml
+  - pgsql/pgsql.Deployment.yaml
+  - precise-code-intel/worker.Deployment.yaml
   - prometheus/prometheus.ConfigMap.yaml
+  - prometheus/prometheus.Deployment.yaml
+  - query-runner/query-runner.Deployment.yaml
+  - redis/redis-cache.Deployment.yaml
+  - redis/redis-store.Deployment.yaml
+  - worker/worker.Deployment.yaml
+  - repo-updater/repo-updater.Deployment.yaml
+  - searcher/searcher.Deployment.yaml
+  - symbols/symbols.Deployment.yaml
+  - syntect-server/syntect-server.Deployment.yaml

@@ -1,7 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+# If you have used an alternative namespace, please change the default value below before generating your overlays. 
+namespace: default 
 bases:
-  - ../non-root
+  - ../non-privileged
 patchesStrategicMerge:
   - frontend/sourcegraph-frontend.Deployment.yaml
   - gitserver/gitserver.StatefulSet.yaml
