@@ -31,14 +31,9 @@ spec:
           httpGet:
             path: /-/ready
             port: 9090
-          initialDelaySeconds: 30
-          timeoutSeconds: 30
-        livenessProbe:
-          httpGet:
-            path: /-/healthy
-            port: 9090
-          initialDelaySeconds: 30
-          timeoutSeconds: 30
+          timeoutSeconds: 3
+          failureThreshold: 120
+          periodSeconds: 5
         ports:
         - containerPort: 9090
           name: http
