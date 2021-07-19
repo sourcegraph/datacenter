@@ -73,7 +73,7 @@ spec:
           value: postgres://sg:@localhost:5432/?sslmode=disable
         - name: PG_EXPORTER_EXTEND_QUERY_PATH
           value: /config/code_intel_queries.yaml
-        image: index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:879be7508b32f6305f8e269d1c7f995ea0c54d6746d41f8046504acc0cea92db
+        image: index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:ba4c6357686eb97698c59d3ef29ccff21394d4bbe131b0dc6a850504fe5e73f3
         terminationMessagePolicy: FallbackToLogsOnError
         name: pgsql-exporter
         resources:
