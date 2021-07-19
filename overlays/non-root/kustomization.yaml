@@ -3,6 +3,7 @@ kind: Kustomization
 bases:
   - ../bases/deployments
   - ../bases/pvcs
+  - ../bases/rbac-roles
 patchesStrategicMerge:
   - codeintel-db/codeintel-db.Deployment.yaml
   - codeinsights-db/codeinsights-db.Deployment.yaml
