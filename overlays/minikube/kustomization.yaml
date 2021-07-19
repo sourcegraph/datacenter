@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: ns-sourcegraph
-bases:
+resources:
   - ../bases/deployments
   - ../bases/rbac-roles
   - ../bases/pvcs
@@ -54,6 +54,12 @@ patchesJson6902:
   - target:
       kind: Deployment
       name: pgsql
+      group: apps
+      version: v1
+    path: delete-resources-2.yaml
+  - target:
+      kind: Deployment
+      name: codeintel-db
       group: apps
       version: v1
     path: delete-resources-2.yaml
