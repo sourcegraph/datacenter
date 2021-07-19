@@ -12,4 +12,4 @@ require (
 	golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898 // indirect
 )
 
-replace github.com/Azure/go-autorest => github.com/Azure/go-autorest v12.4.3+incompatible
+replace github.com/Azure/go-autorest/v14 => github.com/Azure/go-autorest v14.2.0
